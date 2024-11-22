@@ -99,6 +99,15 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   to_port     = 22
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_http_3000" {
+  security_group_id = aws_security_group.http.id
+  cidr_ipv4         = "0.0.0.0/0"
+
+  ip_protocol = "tcp"
+  from_port   = 3000
+  to_port     = 3000
+}
+
 resource "aws_vpc_security_group_egress_rule" "allow_all" {
   security_group_id = aws_security_group.http.id
   cidr_ipv4         = "0.0.0.0/0"

@@ -9,7 +9,7 @@ function App() {
     setLoading(true);
     try {
       const serverIp = process.env.REACT_APP_SERVER_IP;
-      const response = await fetch(`http://${serverIp}/api/v1/hello`);
+      const response = await fetch(`http://${serverIp}:3000/api/v1/hello`);
       if (response.ok) {
         const data = await response.json();
         setMessage(`Message: ${data.message}`);
