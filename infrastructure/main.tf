@@ -15,7 +15,7 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.this.id
   instance_type = "t2.micro"
 
-  key_name = aws_key_pair.web_key.key_name
+  # key_name = aws_key_pair.web_key.key_name
 
   tags = {
     Name = "Hello, Discord!"
@@ -51,7 +51,7 @@ resource "aws_instance" "web" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo dnf update -y",
+      "sleep 120",
       "cd /home/ec2-user/example-app/react-frontend",
       "sed -i 's/^REACT_APP_SERVER_IP=.*$/REACT_APP_SERVER_IP=${self.public_ip}/' .env",
       "npm install",
