@@ -1,0 +1,48 @@
+# Terraform
+# Ignore the Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Ignore the backup files created by Terraform
+*.backup
+
+# Ignore the .terraform directory (which contains the provider and module caches)
+.terraform/
+
+# Ignore the override files created by Terraform
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore the .terraform.lock.hcl file (Terraform 0.14+ lock file)
+.terraform.lock.hcl
+
+# React
+# Ignore node_modules (React dependencies)
+node_modules/
+
+# Ignore build output (React's production build)
+build/
+
+# Ignore .env files (React environment files)
+.env
+
+# Ignore local IDE files
+.vscode/
+.idea/
+
+# Ignore MacOS Finder files
+.DS_Store
+
+# Ignore log files
+*.log
+
+# Ignore npm debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore package lock files (optional, depending on your preference)
+# package-lock.json
+# yarn.lock
