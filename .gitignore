@@ -25,9 +25,6 @@ node_modules/
 # Ignore build output (React's production build)
 build/
 
-# Ignore .env files (React environment files)
-.env
-
 # Ignore local IDE files
 .vscode/
 .idea/
