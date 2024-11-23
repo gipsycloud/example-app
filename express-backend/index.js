@@ -12,3 +12,5 @@ app.get('/api/v1/hello', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+module.exports = app;
