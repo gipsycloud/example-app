@@ -1,0 +1,28 @@
+name: Main CI
+on:
+  push:
+    branches:
+    - main
+    - develop
+    - feat/**
+    - feature/**
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+      
+    - name: Install dependencies
+      working-directory: ./express-backend
+      run: npm install
+    
+    - name: Run unit tests
+      working-directory: ./express-backend
+      run: npm test
