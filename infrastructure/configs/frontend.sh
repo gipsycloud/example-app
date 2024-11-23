@@ -34,7 +34,7 @@ cd example-app/react-frontend
 sed -i "s/^REACT_APP_SERVER_IP=.*$/REACT_APP_SERVER_IP=${aws_instance.backend.public_ip}/" .env
 
 # installing dep
-NODE_OPTIONS="--max-old-space-size=4096" yarn install --production
+NODE_OPTIONS="--max-old-space-size=4096" sudo yarn install --production
 
 # starting the server
 nohup sudo yarn start &

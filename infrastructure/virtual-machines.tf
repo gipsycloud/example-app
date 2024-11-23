@@ -61,46 +61,48 @@ resource "aws_instance" "frontend" { // virtual machine
     aws_security_group.ssh.id,
   ]
 
-  user_data = <<-EOF
-    #!/bin/bash
+  user_data_base64 = filebase64("${path.module}/configs/frontend.sh")
 
-    # swap file creation
-    fallocate -l 4G /swapfile
-    chmod 600 /swapfile
-    mkswap /swapfile
-    swapon /swapfile
-    swapon --show
-    free -h
-    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+  # user_data = <<-EOF
+  #   #!/bin/bash
 
-    # system update
-    sudo dnf update -y
-    sudo dnf install -y git
-    sudo dnf install -y dnf-plugins-core
+  #   # swap file creation
+  #   fallocate -l 4G /swapfile
+  #   chmod 600 /swapfile
+  #   mkswap /swapfile
+  #   swapon /swapfile
+  #   swapon --show
+  #   free -h
+  #   echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 
-    # installing node and npm
-    sudo dnf module enable nodejs:18 -y
-    sudo dnf install -y nodejs
+  #   # system update
+  #   sudo dnf update -y
+  #   sudo dnf install -y git
+  #   sudo dnf install -y dnf-plugins-core
 
-    node -v
-    npm -v
+  #   # installing node and npm
+  #   sudo dnf module enable nodejs:18 -y
+  #   sudo dnf install -y nodejs
 
-    # installing yarn
-    sudo npm install -g yarn
+  #   node -v
+  #   npm -v
 
-    # cloning Git repository
-    cd /home/ec2-user
-    git clone https://github.com/hasAnybodySeenHarry/example-app.git
-    sudo chown -R $(whoami):$(whoami) /home/ec2-user/example-app
-    cd example-app/react-frontend
+  #   # installing yarn
+  #   sudo npm install -g yarn
 
-    # express server ip substitution
-    sed -i "s/^REACT_APP_SERVER_IP=.*$/REACT_APP_SERVER_IP=${aws_instance.backend.public_ip}/" .env
+  #   # cloning Git repository
+  #   cd /home/ec2-user
+  #   git clone https://github.com/hasAnybodySeenHarry/example-app.git
+  #   sudo chown -R $(whoami):$(whoami) /home/ec2-user/example-app
+  #   cd example-app/react-frontend
 
-    # installing dep
-    NODE_OPTIONS="--max-old-space-size=4096" sudo yarn install --production
+  #   # express server ip substitution
+  #   sed -i "s/^REACT_APP_SERVER_IP=.*$/REACT_APP_SERVER_IP=${aws_instance.backend.public_ip}/" .env
 
-    # starting the server
-    nohup sudo yarn start &
-  EOF
+  #   # installing dep
+  #   NODE_OPTIONS="--max-old-space-size=4096" sudo yarn install --production
+
+  #   # starting the server
+  #   nohup sudo yarn start &
+  # EOF
 }
