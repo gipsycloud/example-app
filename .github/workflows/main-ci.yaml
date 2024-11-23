@@ -22,6 +22,10 @@ jobs:
     - name: Install dependencies
       working-directory: ./express-backend
       run: npm install
+
+    - name: Run formatting check (Prettier)
+      working-directory: ./express-backend
+      run: npx prettier --write .
     
     - name: Run unit tests
       working-directory: ./express-backend

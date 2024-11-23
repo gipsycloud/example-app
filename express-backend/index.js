@@ -1,16 +1,16 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 const port = 3000;
 
 app.use(cors());
 
-app.get('/api/v1/hello', (req, res) => {
-  res.json({ message: 'hello' });
+app.get("/api/v1/hello", (req, res) => {
+  res.json({ message: "hello" });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-module.exports = app;
+module.exports = { app, server };
