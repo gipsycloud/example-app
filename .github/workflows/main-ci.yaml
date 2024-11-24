@@ -104,5 +104,5 @@ jobs:
     - name: Terraform Apply
       working-directory: ./infrastructure
       run: |
-        # terraform taint aws_instance.backend
+        terraform taint aws_instance.backend
         terraform apply -auto-approve
