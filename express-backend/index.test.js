@@ -15,6 +15,14 @@ describe("GET /api/v1/hello", () => {
   });
 });
 
+describe("GET /api/v1/invalid", () => {
+  test("should return an error", async () => {
+    const response = await request(app).get("/api/v1/invalid").expect(404);
+
+    expect(response.body.error).toBe("Route not found");
+  });
+});
+
 afterAll(() => {
   server.close();
 });

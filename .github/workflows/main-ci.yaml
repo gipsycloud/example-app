@@ -7,6 +7,9 @@ on:
     - feat/**
     - feature/**
 
+env:
+  NODE_VERSION: 18
+
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
@@ -17,16 +20,45 @@ jobs:
     - name: Setup NodeJS
       uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: ${{ env.NODE_VERSION }}
       
     - name: Install dependencies
       working-directory: ./express-backend
       run: npm install
 
-    - name: Run formatting check (Prettier)
-      working-directory: ./express-backend
-      run: npx prettier --write .
-    
     - name: Run unit tests
       working-directory: ./express-backend
       run: npm test
+
+  format-code:
+    needs: [unit-tests]
+    runs-on: ubuntu:latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup NodeJS
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Install dependencies
+      working-directory: ./express-backend
+      run: npm install
+    
+    - name: Run formatting check (Prettier)
+      working-directory: ./express-backend
+      run: npx prettier --write .
+
+    - name: Push code
+      working-directory: ./express-backend
+      run: |
+        git add .
+        git commit -m "Formatted code"
+        git push origin main
+
+    
+    
+    
+
+
