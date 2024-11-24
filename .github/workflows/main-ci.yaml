@@ -32,7 +32,7 @@ jobs:
 
   format-code:
     needs: [unit-tests]
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -53,9 +53,27 @@ jobs:
     - name: Push code
       working-directory: ./express-backend
       run: |
-        git add .
-        git commit -m "Formatted code"
-        git push origin main
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+        if [[ $(git status --porcelain) ]]; then
+          if ! git add .; then
+            echo "Error: Failed to stage files"
+          fi
+
+          if ! git commit -m "Updated from ref: ${{ github.sha }}"; then
+            echo "Error: Failed to commit files"
+          fi
+
+          if ! git push; then
+            if ! git pull --rebase && git push; then
+              echo "Error: failed to push the code."
+              exit 1
+            fi
+          fi
+        else
+          echo "Nothing to commit."
+        fi
 
     
     
