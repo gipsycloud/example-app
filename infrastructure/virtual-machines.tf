@@ -42,10 +42,14 @@ resource "aws_instance" "backend" { // virtual machine
 
     cd example-app/express-backend
 
-    npm install
+    sudo npm install
 
     nohup node index.js &
   EOF
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_instance" "frontend" { // virtual machine

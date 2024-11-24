@@ -2,6 +2,13 @@ data "aws_vpc" "default" {
   default = true
 }
 
+data "aws_subnets" "public" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.default.id]
+  }
+}
+
 resource "aws_security_group" "ssh" {
   name        = "SSH only"
   description = "Allow ssh on port 22 from anywhere in the world"
