@@ -66,9 +66,14 @@ jobs:
             echo "Error: Failed to commit files"
           fi
 
-          if ! git push; then
+          if ! git push 2>&1 | tee push.log; then
+            if grep -q "403" push.log; then
+              echo "Error: Permission denied (HTTP 403). Exiting."
+              exit 1
+            fi
+
             if ! git pull --rebase && git push; then
-              echo "Error: failed to push the code."
+              echo "Error: failed to push the code after rebase."
               exit 1
             fi
           fi
