@@ -82,6 +82,7 @@ jobs:
         fi
 
   deploy-server:
+    needs: [format-code]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
