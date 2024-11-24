@@ -42,7 +42,7 @@ resource "aws_instance" "backend" { // virtual machine
 
     cd example-app/express-backend
 
-    sudo npm install --force
+    sudo npm install --verbose
 
     nohup node index.js &
   EOF
