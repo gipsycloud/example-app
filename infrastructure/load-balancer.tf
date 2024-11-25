@@ -63,6 +63,8 @@ resource "aws_lb_target_group" "backend" {
     timeout             = 5
     path                = "/api/v1/hello"
   }
+
+  deregistration_delay = 10
 }
 
 resource "aws_lb_listener" "backend" {
