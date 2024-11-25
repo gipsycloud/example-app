@@ -1,7 +1,7 @@
 data "aws_ami" "this" { // virtual machine template
   most_recent = true
   owners      = ["amazon"]
-  
+
   filter {
     name   = "architecture"
     values = ["x86_64"]
@@ -46,7 +46,7 @@ resource "aws_instance" "backend" { // virtual machine
 
     sudo npm install --verbose
 
-    nohup node index.js &
+    node index.js
   EOF
 
   lifecycle {
