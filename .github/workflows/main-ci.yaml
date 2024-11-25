@@ -101,5 +101,10 @@ jobs:
     - name: Run terraform create
       working-directory: ./infrastructure
       run: |
+        - name: Update helm files
+      run: |
+        RUN_NUMBER=${{ github.run_number }}
+
         terraform init
+        sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/backend.sh
         terraform apply -auto-approve

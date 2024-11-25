@@ -3,6 +3,8 @@ sudo dnf update -y
 sudo dnf install -y git
 sudo dnf install -y dnf-plugins-core
 
+echo "Deploying application with run number: {{RUN_NUMBER}}"
+
 sudo dnf module enable nodejs:18 -y
 sudo dnf install -y nodejs
 
