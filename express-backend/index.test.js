@@ -2,10 +2,10 @@ const request = require("supertest");
 const { app, server } = require("./index");
 
 describe("GET /api/v1/hello", () => {
-  test('should return a JSON response with the message "hello, discord!"', async () => {
+  test('should return a JSON response with the message "hello, facebook!"', async () => {
     const response = await request(app).get("/api/v1/hello").expect(200);
 
-    expect(response.body.message).toBe("hello, discord!");
+    expect(response.body.message).toBe("hello, facebook!");
   });
 
   test('should not return a JSON response with the message "hi"', async () => {
