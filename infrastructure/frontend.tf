@@ -18,14 +18,6 @@ resource "aws_launch_template" "frontend" {
     aws_security_group.ssh.id,
   ]
 
-#   network_interfaces {
-#     associate_public_ip_address = false
-#     security_groups = [
-#       aws_security_group.frontend.id,
-#       aws_security_group.ssh.id,
-#     ]
-#   }
-
   tag_specifications {
     resource_type = "instance"
 
@@ -34,7 +26,9 @@ resource "aws_launch_template" "frontend" {
     }
   }
 
-  user_data = filebase64("${path.module}/configs/frontend.sh")
+  user_data = base64encode(templatefile("${path.module}/configs/frontend.sh.tmpl", {
+    load_balancer_dns = aws_lb.lb.dns_name
+  }))
 }
 
 resource "aws_autoscaling_group" "frontend" {

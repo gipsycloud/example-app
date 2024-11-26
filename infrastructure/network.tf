@@ -28,7 +28,7 @@ resource "aws_security_group" "ssh" {
 
 resource "aws_security_group" "backend" {
   name        = "http 3000 only backend"
-  description = "Allow http traffic on port 3000 from anywhere in the world"
+  description = "Allow http traffic on port 3000 from the load balancer"
   vpc_id      = data.aws_vpc.default.id
 
   tags = {
@@ -38,7 +38,7 @@ resource "aws_security_group" "backend" {
 
 resource "aws_security_group" "frontend" {
   name        = "http 80 only frontend"
-  description = "Allow http traffic on port 80 from anywhere in the world"
+  description = "Allow http traffic on port 80 from the load balancer"
   vpc_id      = data.aws_vpc.default.id
 
   tags = {
@@ -47,8 +47,8 @@ resource "aws_security_group" "frontend" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http_backend_3000" {
-  security_group_id = aws_security_group.backend.id
-  cidr_ipv4         = "0.0.0.0/0"
+  security_group_id            = aws_security_group.backend.id
+  referenced_security_group_id = aws_security_group.lb.id
 
   ip_protocol = "tcp"
   from_port   = 3000
@@ -56,8 +56,8 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_backend_3000" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http_frontend_3000" {
-  security_group_id = aws_security_group.frontend.id
-  cidr_ipv4         = "0.0.0.0/0"
+  security_group_id            = aws_security_group.frontend.id
+  referenced_security_group_id = aws_security_group.lb.id
 
   ip_protocol = "tcp"
   from_port   = 3000

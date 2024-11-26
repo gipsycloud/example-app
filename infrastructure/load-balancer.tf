@@ -1,5 +1,5 @@
 resource "aws_lb" "lb" {
-  name               = "backend-lb"
+  name               = "hello-discord"
   internal           = false
   load_balancer_type = "application"
   security_groups = [

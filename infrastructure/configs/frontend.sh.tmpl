@@ -31,7 +31,7 @@ sudo chown -R $(whoami):$(whoami) /home/ec2-user/example-app
 cd example-app/react-frontend
 
 # express server ip substitution
-sed -i "s/^REACT_APP_SERVER_IP=.*$/REACT_APP_SERVER_IP=${aws_instance.backend.public_ip}/" .env
+sed -i "s/^REACT_APP_SERVER_IP=.*$/REACT_APP_SERVER_IP=${load_balancer_dns}/" .env
 
 # installing dep
 NODE_OPTIONS="--max-old-space-size=4096" sudo yarn install --production

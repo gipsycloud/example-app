@@ -18,14 +18,6 @@ resource "aws_launch_template" "backend" {
     aws_security_group.ssh.id,
   ]
 
-#   network_interfaces {
-#     associate_public_ip_address = false
-#     security_groups = [
-#       aws_security_group.frontend.id,
-#       aws_security_group.ssh.id,
-#     ]
-#   }
-
   tag_specifications {
     resource_type = "instance"
 
