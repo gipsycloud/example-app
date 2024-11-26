@@ -68,8 +68,8 @@ resource "aws_lb_target_group" "backend" {
     enabled             = true
     healthy_threshold   = 2
     unhealthy_threshold = 10
-    interval            = 6
-    timeout             = 5
+    interval            = 30
+    timeout             = 10
     path                = "/api/v1/hello"
   }
 
