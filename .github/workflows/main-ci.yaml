@@ -105,4 +105,5 @@ jobs:
 
         terraform init
         sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/backend.sh
+        sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/frontend.sh.tmpl
         terraform apply -auto-approve

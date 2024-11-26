@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [message, setMessage] = useState('Message: ____');
+  const [message, setMessage] = useState('Greeting 👋: ____');
   const [loading, setLoading] = useState(false);
 
   const handleConnectClick = async () => {
@@ -12,7 +12,7 @@ function App() {
       const response = await fetch(`http://${serverIp}:3000/api/v1/hello`);
       if (response.ok) {
         const data = await response.json();
-        setMessage(`Message: ${data.message}`);
+        setMessage(`Greeting 👋: ${data.message}`);
       } else {
         setMessage('Error connecting to backend');
       }
