@@ -2,10 +2,10 @@ name: Main CI
 on:
   push:
     branches:
-    - main
-    - develop
-    - feat/**
-    - feature/**
+      - main
+      - develop
+      - feat/**
+      - feature/**
   workflow_dispatch:
 
 env:
@@ -15,95 +15,95 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup NodeJS
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-      
-    - name: Install dependencies
-      working-directory: ./express-backend
-      run: npm install
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-    - name: Run unit tests
-      working-directory: ./express-backend
-      run: npm test
+      - name: Install dependencies
+        working-directory: ./express-backend
+        run: npm install
+
+      - name: Run unit tests
+        working-directory: ./express-backend
+        run: npm test
 
   format-code:
     needs: [unit-tests]
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup NodeJS
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ env.NODE_VERSION }}
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-    - name: Install dependencies
-      working-directory: ./express-backend
-      run: npm install
-    
-    - name: Run formatting check (Prettier)
-      working-directory: ./express-backend
-      run: npx prettier --write .
+      - name: Install dependencies
+        working-directory: ./express-backend
+        run: npm install
 
-    - name: Push code
-      working-directory: ./express-backend
-      run: |
-        git config user.name "${GITHUB_ACTOR}"
-        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - name: Run formatting check (Prettier)
+        working-directory: ./express-backend
+        run: npx prettier --write .
 
-        if [[ $(git status --porcelain) ]]; then
-          if ! git add .; then
-            echo "Error: Failed to stage files"
-          fi
+      - name: Push code
+        working-directory: ./express-backend
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
-          if ! git commit -m "Updated from ref: ${{ github.sha }}"; then
-            echo "Error: Failed to commit files"
-          fi
-
-          if ! git push 2>&1 | tee push.log; then
-            if grep -q "403" push.log; then
-              echo "Error: Permission denied (HTTP 403). Exiting."
-              exit 1
+          if [[ $(git status --porcelain) ]]; then
+            if ! git add .; then
+              echo "Error: Failed to stage files"
             fi
 
-            if ! git pull --rebase && git push; then
-              echo "Error: failed to push the code after rebase."
-              exit 1
+            if ! git commit -m "Updated from ref: ${{ github.sha }}"; then
+              echo "Error: Failed to commit files"
             fi
+
+            if ! git push 2>&1 | tee push.log; then
+              if grep -q "403" push.log; then
+                echo "Error: Permission denied (HTTP 403). Exiting."
+                exit 1
+              fi
+
+              if ! git pull --rebase && git push; then
+                echo "Error: failed to push the code after rebase."
+                exit 1
+              fi
+            fi
+          else
+            echo "Nothing to commit."
           fi
-        else
-          echo "Nothing to commit."
-        fi
 
-  deploy-code:
-    needs: [format-code]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+  # deploy-code:
+  #   needs: [format-code]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-2
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v2
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: eu-west-2
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
+  #   - name: Setup Terraform
+  #     uses: hashicorp/setup-terraform@v3
 
-    - name: Run terraform create
-      working-directory: ./infrastructure
-      run: |
-        RUN_NUMBER=${{ github.run_number }}
+  #   - name: Run terraform create
+  #     working-directory: ./infrastructure
+  #     run: |
+  #       RUN_NUMBER=${{ github.run_number }}
 
-        terraform init
-        sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/backend.sh
-        sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/frontend.sh.tmpl
-        terraform apply -auto-approve
+  #       terraform init
+  #       sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/backend.sh
+  #       sed -i "s/{{RUN_NUMBER}}/${RUN_NUMBER}/g" ./configs/frontend.sh.tmpl
+  #       terraform apply -auto-approve
