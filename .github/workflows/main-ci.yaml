@@ -96,7 +96,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push image
-        working-directory: ./express-backend
+        # working-directory: ./express-backend
         uses: docker/build-push-action@v5
         with:
           context: .
