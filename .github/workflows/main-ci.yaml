@@ -119,15 +119,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push image
-        working-directory: ./react-frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1.0.${{ github.run_number }}
+      # - name: Build and push image
+      #   working-directory: ./react-frontend
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: |
+      #       docker.io/${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1.0.${{ github.run_number }}
 
   # deploy-code:
   #   needs: [format-code]
