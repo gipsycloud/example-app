@@ -96,11 +96,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push image
-        # working-directory: ./express-backend
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./express-backend
+          file: ./express-backend/Dockerfile
           push: true
           tags: |
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/backend:v1.0.${{ github.run_number }}
@@ -119,15 +118,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # - name: Build and push image
-      #   working-directory: ./react-frontend
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     file: ./Dockerfile
-      #     push: true
-      #     tags: |
-      #       docker.io/${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1.0.${{ github.run_number }}
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./react-frontend
+          file: ./react-frontend/Dockerfile
+          push: true
+          tags: |
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/frontend:v1.0.${{ github.run_number }}
 
   # deploy-code:
   #   needs: [format-code]
