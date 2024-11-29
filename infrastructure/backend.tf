@@ -1,5 +1,5 @@
-resource "aws_launch_template" "backend" {
-  name = "expressjs-backend"
+resource "aws_launch_template" "server" {
+  name = "app-server"
 
   block_device_mappings {
     device_name = "/dev/sdf"
@@ -29,8 +29,8 @@ resource "aws_launch_template" "backend" {
   user_data = filebase64("${path.module}/configs/docker.sh")
 }
 
-resource "aws_autoscaling_group" "backend" {
-  name                      = "backend"
+resource "aws_autoscaling_group" "server" {
+  name                      = "server"
   max_size                  = 1
   min_size                  = 1
   health_check_grace_period = 0
@@ -46,8 +46,8 @@ resource "aws_autoscaling_group" "backend" {
   }
 
   launch_template {
-    id      = aws_launch_template.backend.id
-    version = aws_launch_template.backend.latest_version
+    id      = aws_launch_template.server.id
+    version = aws_launch_template.server.latest_version
   }
 
   target_group_arns = [

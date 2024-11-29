@@ -150,7 +150,7 @@ jobs:
             docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}
 
   deploy-code:
-    needs: [containerize-backend, containerize-frontend]
+    needs: [repo-meta, containerize-backend, containerize-frontend]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -169,8 +169,10 @@ jobs:
       - name: Run terraform create
         working-directory: ./infrastructure
         run: |
-          IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/backend:${{ needs.repo-meta.outputs.image_name }}"
-          echo ${IMAGE_ID}
-          # terraform init
-          # sed -i "s#{{IMAGE_ID}}#${IMAGE_ID}#g" ./configs/docker.sh
-          # terraform apply -auto-approve
+          BACKEND_IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/backend:${{ needs.repo-meta.outputs.image_name }}"
+          FRONTEND_IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}"
+
+          terraform init
+          sed -i "s#{{BACKEND_IMAGE_ID}}#${BACKEND_IMAGE_ID}#g" ./configs/docker.sh
+          sed -i "s#{{FRONTEND_IMAGE_ID}}#${FRONTEND_IMAGE_ID}#g" ./configs/docker.sh
+          terraform apply -auto-approve

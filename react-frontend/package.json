@@ -17,6 +17,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "react-dotenv": {
+    "whitelist": [
+      "API_URL"
+    ]
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
