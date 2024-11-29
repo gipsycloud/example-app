@@ -104,7 +104,7 @@ jobs:
           fi
 
   containerize-backend:
-    needs: [format-code]
+    needs: [repo-meta, format-code]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -127,7 +127,7 @@ jobs:
             docker.io/${{ vars.DOCKERHUB_USERNAME }}/backend:${{ needs.repo-meta.outputs.image_name }}
 
   containerize-frontend:
-    needs: [format-code]
+    needs: [repo-meta, format-code]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -169,7 +169,7 @@ jobs:
       - name: Run terraform create
         working-directory: ./infrastructure
         run: |
-          IMAGE_ID="docker.io/demona9458/backend:v1.0.50"
+          IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}"
 
           terraform init
           sed -i "s#{{IMAGE_ID}}#${IMAGE_ID}#g" ./configs/docker.sh

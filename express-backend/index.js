@@ -6,7 +6,7 @@ const port = 3000;
 app.use(cors());
 
 app.get("/api/v1/hello", (req, res) => {
-  res.json({ message: "Mingalapa!" });
+  res.json({ message: "Nin Hao!" });
 });
 
 // default catch-all router
