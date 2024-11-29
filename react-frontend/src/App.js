@@ -8,8 +8,10 @@ function App() {
   const handleConnectClick = async () => {
     setLoading(true);
     try {
-      const serverIp = process.env.REACT_APP_API_URL;
-      const response = await fetch(`http://${serverIp}:3000/api/v1/hello`);
+      // const serverIp = process.env.REACT_APP_API_URL;
+      const response = await fetch(
+        `http://hello-discord-30691903.eu-west-2.elb.amazonaws.com:3000/api/v1/hello`
+      );
       if (response.ok) {
         const data = await response.json();
         setMessage(`Greeting 👋: ${data.message}`);
