@@ -101,7 +101,6 @@ resource "aws_lb_target_group" "frontend" {
     timeout             = 10
     path                = "/"
   }
-
   deregistration_delay = 10
 }
 
