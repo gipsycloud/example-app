@@ -69,7 +69,7 @@ resource "aws_lb_target_group" "backend" {
     healthy_threshold   = 2
     unhealthy_threshold = 10
     interval            = 5
-    timeout             = 10
+    timeout             = 4
     path                = "/api/v1/hello"
   }
 
@@ -98,7 +98,7 @@ resource "aws_lb_target_group" "frontend" {
     healthy_threshold   = 2
     unhealthy_threshold = 10
     interval            = 5
-    timeout             = 10
+    timeout             = 4
     path                = "/"
   }
 
