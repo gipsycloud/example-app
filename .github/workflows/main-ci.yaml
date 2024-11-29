@@ -169,7 +169,7 @@ jobs:
       - name: Run terraform create
         working-directory: ./infrastructure
         run: |
-          IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}"
+          IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/backend:${{ needs.repo-meta.outputs.image_name }}"
 
           terraform init
           sed -i "s#{{IMAGE_ID}}#${IMAGE_ID}#g" ./configs/docker.sh
