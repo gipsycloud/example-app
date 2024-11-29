@@ -14,7 +14,7 @@ resource "aws_launch_template" "server" {
   instance_type = "t2.micro"
 
   vpc_security_group_ids = [
-    aws_security_group.backend.id,
+    aws_security_group.server.id,
     aws_security_group.ssh.id,
   ]
 
@@ -22,7 +22,7 @@ resource "aws_launch_template" "server" {
     resource_type = "instance"
 
     tags = {
-      Name = "ExpressJS Backend"
+      Name = "ExpressJS + ReactJS"
     }
   }
 

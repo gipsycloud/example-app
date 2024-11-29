@@ -26,9 +26,9 @@ resource "aws_security_group" "ssh" {
   }
 }
 
-resource "aws_security_group" "backend" {
-  name        = "http 3000 only backend"
-  description = "Allow http traffic on port 3000 from the load balancer"
+resource "aws_security_group" "server" {
+  name        = "http 3000/3001 only server"
+  description = "Allow http traffic on port 3000/3001 from the load balancer"
   vpc_id      = data.aws_vpc.default.id
 
   tags = {
@@ -36,18 +36,8 @@ resource "aws_security_group" "backend" {
   }
 }
 
-resource "aws_security_group" "frontend" {
-  name        = "http 80 only frontend"
-  description = "Allow http traffic on port 80 from the load balancer"
-  vpc_id      = data.aws_vpc.default.id
-
-  tags = {
-    "lab" = "example"
-  }
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_http_backend_3000" {
-  security_group_id            = aws_security_group.backend.id
+resource "aws_vpc_security_group_ingress_rule" "allow_http_server_3000" {
+  security_group_id            = aws_security_group.server.id
   referenced_security_group_id = aws_security_group.lb.id
 
   ip_protocol = "tcp"
@@ -55,24 +45,17 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_backend_3000" {
   to_port     = 3000
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_http_frontend_3000" {
-  security_group_id            = aws_security_group.frontend.id
+resource "aws_vpc_security_group_ingress_rule" "allow_http_server_3001" {
+  security_group_id            = aws_security_group.server.id
   referenced_security_group_id = aws_security_group.lb.id
 
   ip_protocol = "tcp"
-  from_port   = 3000
-  to_port     = 3000
+  from_port   = 3001
+  to_port     = 3001
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_egress_backend_all" {
-  security_group_id = aws_security_group.backend.id
-  cidr_ipv4         = "0.0.0.0/0"
-
-  ip_protocol = -1
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_egress_frontend_all" {
-  security_group_id = aws_security_group.frontend.id
+resource "aws_vpc_security_group_egress_rule" "allow_egress_server_all" {
+  security_group_id = aws_security_group.server.id
   cidr_ipv4         = "0.0.0.0/0"
 
   ip_protocol = -1
