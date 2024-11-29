@@ -50,7 +50,10 @@ resource "aws_autoscaling_group" "backend" {
     version = aws_launch_template.backend.latest_version
   }
 
-  target_group_arns = [aws_lb_target_group.backend.arn]
+  target_group_arns = [
+    aws_lb_target_group.backend.arn,
+    aws_lb_target_group.frontend.arn,
+  ]
 
   instance_refresh {
     strategy = "Rolling"
