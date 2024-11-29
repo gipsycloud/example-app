@@ -26,7 +26,7 @@ resource "aws_launch_template" "backend" {
     }
   }
 
-  user_data = filebase64("${path.module}/configs/backend.sh")
+  user_data = filebase64("${path.module}/configs/docker.sh")
 }
 
 resource "aws_autoscaling_group" "backend" {
