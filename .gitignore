@@ -3,6 +3,8 @@
 *.tfstate
 *.tfstate.*
 
+test/
+
 .state/
 
 # Ignore the backup files created by Terraform
