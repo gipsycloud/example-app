@@ -1,5 +1,5 @@
 const request = require("supertest");
-const { app, server } = require("./index");
+const { app } = require("../index");
 
 describe("GET /api/v1/hello", () => {
   test('should return a JSON response with the message "Nin Hao!"', async () => {
@@ -21,8 +21,4 @@ describe("GET /api/v1/invalid", () => {
 
     expect(response.body.error).toBe("Route not found");
   });
-});
-
-afterAll(() => {
-  server.close();
 });

@@ -2,14 +2,15 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3000;
-const pool = require("./db");
-const { SearchSource } = require("jest");
+const { pool, ping } = require("./db");
 
 app.use(cors());
 app.use(express.json());
 
 app.get("/api/v1/hello", (req, res) => {
-  res.json({ message: "Nin Hao!" });
+  res.json({
+    message: "Nin Hao!",
+  });
 });
 
 app.get("/api/v1/users", async (req, res) => {
@@ -18,7 +19,9 @@ app.get("/api/v1/users", async (req, res) => {
     res.json(result.rows);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({
+      error: "Internal server error",
+    });
   }
 });
 
@@ -41,32 +44,50 @@ app.post("/api/v1/users", async (req, res) => {
       });
     } else {
       console.error(error.message);
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).json({
+        error: "Internal server error",
+      });
     }
   }
 });
 
 // default catch-all router
 app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
+  res.status(404).json({
+    error: "Route not found",
+  });
 });
 
-const server = app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+const startServer = async () => {
+  try {
+    await ping();
+    console.log("Database is reachable!");
 
-module.exports = { app, server };
+    const server = app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
 
-const shutdown = () => {
+    process.on("SIGINT", () => shutdown(server));
+    process.on("SIGTERM", () => shutdown(server));
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+};
+
+const shutdown = (server) => {
   console.log("Received signal to shutdown.");
+  pool.end(() => {
+    console.log("Database connections closed.");
+  });
   server.close(() => {
     console.log("Server closed.");
-    pool.end(() => {
-      console.log("Database connections closed.");
-      process.exit(0);
-    });
+    process.exit(0);
   });
 };
 
-process.on("SIGINT", shutdown);
-process.on("SIGTERM", shutdown);
+if (require.main == module) {
+  startServer();
+}
+
+module.exports = { app };

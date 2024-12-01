@@ -149,30 +149,30 @@ jobs:
           tags: |
             docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}
 
-  deploy-code:
-    needs: [repo-meta, containerize-backend, containerize-frontend]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # deploy-code:
+  #   needs: [repo-meta, containerize-backend, containerize-frontend]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-2
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: eu-west-2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v3
 
-      - name: Run terraform create
-        working-directory: ./infrastructure
-        run: |
-          BACKEND_IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/backend:${{ needs.repo-meta.outputs.image_name }}"
-          FRONTEND_IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}"
+  #     - name: Run terraform create
+  #       working-directory: ./infrastructure
+  #       run: |
+  #         BACKEND_IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/backend:${{ needs.repo-meta.outputs.image_name }}"
+  #         FRONTEND_IMAGE_ID="docker.io/${{ vars.DOCKERHUB_USERNAME }}/frontend:${{ needs.repo-meta.outputs.image_name }}"
 
-          terraform init
-          sed -i "s#{{BACKEND_IMAGE_ID}}#${BACKEND_IMAGE_ID}#g" ./configs/docker.sh
-          sed -i "s#{{FRONTEND_IMAGE_ID}}#${FRONTEND_IMAGE_ID}#g" ./configs/docker.sh
-          terraform apply -auto-approve
+  #         terraform init
+  #         sed -i "s#{{BACKEND_IMAGE_ID}}#${BACKEND_IMAGE_ID}#g" ./configs/docker.sh
+  #         sed -i "s#{{FRONTEND_IMAGE_ID}}#${FRONTEND_IMAGE_ID}#g" ./configs/docker.sh
+  #         terraform apply -auto-approve

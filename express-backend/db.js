@@ -6,19 +6,15 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: 5432,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: false,
 });
 
-(async () => {
+async function ping() {
   try {
     await pool.query("SELECT 1");
-    console.log("Successfully connected to database.");
   } catch (error) {
-    console.error("Database connection error:", error.message);
-    process.exit(1);
+    throw new Error("Database connection failed: " + error.message);
   }
-})();
+}
 
-module.exports = pool;
+module.exports = { pool, ping };
