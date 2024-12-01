@@ -68,7 +68,7 @@ describe("POST /api/v1/users", () => {
       .expect(400);
 
     expect(response.body.error).toBe(
-      "Email already exists. Please use a different email."
+      "Email already exists. Please use a different email.",
     );
   });
 });
