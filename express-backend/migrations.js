@@ -6,7 +6,7 @@ const { pool } = require("./db");
   try {
     const filePath = path.join(
       __dirname,
-      "migrations/001_create_users_table.sql"
+      "migrations/001_create_users_table.sql",
     );
     const sql = fs.readFileSync(filePath, "utf8");
 
