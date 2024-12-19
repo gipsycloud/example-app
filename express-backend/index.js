@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.get("/api/v1/hello", (req, res) => {
   res.json({
-    message: "Nin Hao!",
+    message: "Hello!",
   });
 });
 
