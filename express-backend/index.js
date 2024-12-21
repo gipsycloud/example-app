@@ -59,7 +59,7 @@ app.post(
 
       const result = await pool.query(
         "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id",
-        [name, email]
+        [name, email],
       );
       res.status(201).json({
         id: result.rows[0].id,
@@ -76,7 +76,7 @@ app.post(
         res.status(500).json({ error: "Internal server error" });
       }
     }
-  }
+  },
 );
 
 // default catch-all router
